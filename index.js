@@ -1,3 +1,16 @@
+// Organizing your server-side code is important for maintainability and scalability. Creating separate folders for each project is a good approach, especially if you plan to handle multiple projects in the future. Here are some suggestions for organizing your server-side codebase:
+
+// Project-Level Structure: Create a separate folder for each project at the root level of your server-side codebase. This allows you to keep the code for each project isolated and organized. Inside each project folder, you can have subfolders for different components or modules.
+
+// Route-Based Structure: Consider organizing your code based on routes. Create a folder called routes or api within each project folder to contain the route handlers or controllers. Each route handler can be a separate file or grouped based on related functionality. For example, you can have a users.js file for handling user-related routes and a posts.js file for handling post-related routes.
+
+// Middleware: Create a separate folder for middleware functions that can be shared across routes. This folder can contain middleware modules such as authentication, authorization, error handling, logging, and any other common functionality that needs to be applied to multiple routes.
+
+// Services: If you have complex business logic or functionality that is not specific to a route, consider creating a services folder within each project folder. This folder can contain modules that encapsulate specific functionalities or interact with external services or databases. This separation allows for better code organization and easier maintenance.
+
+// Utilities and Helpers: Consider creating a utils or helpers folder to store utility functions or helper modules that can be used across multiple projects or routes. These functions can provide common functionality or perform specific tasks that are reusable in different parts of your server-side codebase.
+
+
 // Imports / Requires
 const { handleUserPost } = require("./utils/utils");
 
@@ -287,7 +300,7 @@ app.post("/logIn", (req, res) => {
           } else {
             console.log(
               "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USER HEREEEEE" +
-                user
+              user
             );
             req.session.save(() => {
               res.status(200).json({
