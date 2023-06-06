@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const Post = require("../utils/userModel").Post;
+// User
 const User = require("../utils/userModel").User;
 
-const mongoose = require("mongoose");
+// Passport
 const passport = require("passport");
 
 // Route handles logging in
@@ -20,6 +20,15 @@ router.post("/logIn", (req, res) => {
   // console.log(user + 'USER ID');
 
   req.login(user, function (err) {
+    // USE THIS TO QUICKLY DELETE ALL USERS
+    // User.deleteMany({})
+    //   .then(() => {
+    //     console.log("All user documents deleted.");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
     if (err) {
       console.log("ERROR HERE" + err);
     } else {
@@ -29,10 +38,6 @@ router.post("/logIn", (req, res) => {
           if (!user) {
             console.log("ERROR NO USER FOUND");
           } else {
-            console.log(
-              "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! USER HEREEEEE" +
-                user
-            );
             req.session.save(() => {
               res.status(200).json({
                 message: "Login successful",
@@ -48,6 +53,39 @@ router.post("/logIn", (req, res) => {
     }
   });
 });
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: [
+      "profile",
+      "email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+    ],
+  })
+);
+
+// Google callback route
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/",
+  }),
+  (req, res) => {
+    const userParam = req.user;
+    const redirectURL = "http://localhost:3000/" + userParam;
+    // Send a message to the opener window
+    const script = `
+   <script>
+     window.opener.postMessage({ message: "Authentication complete", userData: ${JSON.stringify(
+       req.user
+     )} }, "*");
+     window.close();
+   </script>
+ `;
+    res.send(script);
+  }
+);
 
 // Route handles signing up
 router.post("/signUp", (req, res) => {

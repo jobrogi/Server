@@ -9,7 +9,14 @@ const mongoose = require("mongoose");
 // This route when called will get ALL user posts and send it back to the
 // client side!
 router.get("/getFeed", async (req, res) => {
-  console.log("made it!");
+  // USE THIS TO DELETE ALL POSTS
+  //   Post.deleteMany({})
+  //     .then(() => {
+  //       console.log("All user documents deleted.");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
   try {
     // Retrieve posts with the specified user ID
     const posts = await Post.find().populate("user");
